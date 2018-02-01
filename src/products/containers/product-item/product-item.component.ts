@@ -87,7 +87,10 @@ export class ProductItemComponent implements OnInit {
 
             return pizzas.find(pizza => pizza.id == parseInt(params.id, 10));
           }),
-          tap((pizza: Pizza) => this.store.dispatch(new fromStore.SelectPizza(pizza))),
+          tap((pizza: Pizza) => {
+            this.store.dispatch(new fromStore.SelectPizza(pizza));
+            this.store.dispatch(new fromStore.LoadToppings());
+          }),
         )
       })
     );

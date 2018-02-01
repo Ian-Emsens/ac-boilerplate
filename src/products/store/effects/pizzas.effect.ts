@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { Effect, Actions } from '@ngrx/effects';
 
+import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -14,12 +15,11 @@ import {
 
 import * as pizzaActions from '../actions/pizzas.action';
 import * as fromServices from '../../services';
-import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class PizzasEffects {
 
-  @Effect() loadPizza$: Observable<pizzaActions.PizzasAction> =
+  @Effect() loadPizzas$: Observable<pizzaActions.PizzasAction> =
     this.actions.ofType(pizzaActions.LOAD_PIZZAS).pipe(
       exhaustMap(() => {
         return this.pizzaService.getPizzas().pipe(
