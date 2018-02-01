@@ -32,18 +32,18 @@
       "id": 1
     },
     {
-      "name": "Seaside Surfin'",
+      "name": "Countryside Rollin'",
       "toppings": [
         "mozzarella",
-        "mushroom",
-        "anchovy",
         "pepper",
-        "olive",
         "onion",
         "sweetcorn",
-        "tomato"
+        "tomato",
+        "chili",
+        "basil"
       ],
-      "id": 2
+      "id": 2,
+      "sizes": []
     }
   ]
 }
