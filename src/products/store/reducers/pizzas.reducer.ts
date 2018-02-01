@@ -27,8 +27,8 @@ export function reducer(state: PizzaState = initialState, action: fromPizzas.Piz
     case fromPizzas.LOAD_PIZZAS_FAIL: {
       return {
         ...state,
-        loading: true,
-        loaded: true,
+        loading: false,
+        loaded: false,
       }
     }
 
@@ -36,7 +36,8 @@ export function reducer(state: PizzaState = initialState, action: fromPizzas.Piz
       return {
         ...state,
         loading: false,
-        loaded: false,
+        loaded: true,
+        pizzas: action.payload,
       }
     }
 
