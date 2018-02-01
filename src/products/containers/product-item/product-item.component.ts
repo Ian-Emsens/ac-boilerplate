@@ -1,6 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { Store } from '@ngrx/store';
+
+import { Observable } from 'rxjs/Observable';
+
 import { Pizza } from '../../models/pizza.model';
 import { PizzasService } from '../../services/pizzas.service';
 import { ToppingsService } from '../../services/toppings.service';
@@ -9,10 +13,10 @@ import * as fromStore from '../../store';
 
 @Component({
   selector: 'product-item',
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['product-item.component.scss'],
   template: `
-    <div 
+    <div
       class="product-item">
       <pizza-form
         [pizza]="pizza"
@@ -22,7 +26,7 @@ import * as fromStore from '../../store';
         (update)="onUpdate($event)"
         (remove)="onRemove($event)">
         <pizza-display
-          [pizza]="selected">
+          [pizza]="selected$ | async">
         </pizza-display>
       </pizza-form>
     </div>
@@ -30,17 +34,20 @@ import * as fromStore from '../../store';
 })
 export class ProductItemComponent implements OnInit {
   pizza: Pizza;
-  selected: Pizza;
+  selected$: Observable<Pizza>;
   toppings: string[];
 
   constructor(
     private pizzaService: PizzasService,
     private toppingsService: ToppingsService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private store: Store<fromStore.ProductsState>,
   ) {}
 
   ngOnInit() {
+    this.selected$ = this.store.select(fromStore.getSelectedPizza);
+
     this.pizzaService.getPizzas().subscribe(pizzas => {
       const param = this.route.snapshot.params.id;
       let pizza;
@@ -48,9 +55,9 @@ export class ProductItemComponent implements OnInit {
         pizza = {};
       } else {
         pizza = pizzas.find(pizza => pizza.id == parseInt(param, 10));
+        this.store.dispatch(new fromStore.SelectPizza(pizza));
       }
       this.pizza = pizza;
-      this.selected = pizza;
       this.toppingsService.getToppings().subscribe(toppings => {
         this.toppings = toppings;
       });
@@ -58,7 +65,7 @@ export class ProductItemComponent implements OnInit {
   }
 
   onSelect(event: Pizza) {
-    this.selected = event;
+    this.store.dispatch(new fromStore.SelectPizza(event));
   }
 
   onCreate(event: Pizza) {
