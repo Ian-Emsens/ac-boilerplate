@@ -19,7 +19,7 @@ import * as fromServices from './services';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
-import { reducers } from './store';
+import { effects, reducers } from './store';
 
 // routes
 export const ROUTES: Routes = [
@@ -44,7 +44,7 @@ export const ROUTES: Routes = [
     HttpClientModule,
     RouterModule.forChild(ROUTES),
     StoreModule.forFeature('products', reducers),
-    EffectsModule.forFeature([]),
+    EffectsModule.forFeature(effects),
   ],
   providers: [...fromGuards.guards, ...fromServices.services],
   declarations: [...fromContainers.containers, ...fromComponents.components],
