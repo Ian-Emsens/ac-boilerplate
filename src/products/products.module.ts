@@ -16,8 +16,8 @@ import * as fromGuards from './guards';
 // services
 import * as fromServices from './services';
 
-import { StoreModule } from '@ngrx/store/src/store_module';
-import { EffectsModule } from '@ngrx/effects/src/effects_module';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 import { reducers } from './store';
 
