@@ -4,6 +4,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+import {
+  map,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 
 import { Pizza } from '../../models/pizza.model';
 import { PizzasService } from '../../services/pizzas.service';
@@ -19,7 +25,7 @@ import * as fromStore from '../../store';
     <div
       class="product-item">
       <pizza-form
-        [pizza]="pizza"
+        [pizza]="pizza$ | async"
         [toppings]="toppings"
         (selected)="onSelect($event)"
         (create)="onCreate($event)"
@@ -33,8 +39,9 @@ import * as fromStore from '../../store';
   `,
 })
 export class ProductItemComponent implements OnInit {
-  pizza: Pizza;
+  pizza$: Observable<Pizza>;
   selected$: Observable<Pizza>;
+
   toppings: string[];
 
   constructor(
@@ -48,20 +55,39 @@ export class ProductItemComponent implements OnInit {
   ngOnInit() {
     this.selected$ = this.store.select(fromStore.getSelectedPizza);
 
-    this.pizzaService.getPizzas().subscribe(pizzas => {
-      const param = this.route.snapshot.params.id;
-      let pizza;
-      if (param === 'new') {
-        pizza = {};
-      } else {
-        pizza = pizzas.find(pizza => pizza.id == parseInt(param, 10));
-        this.store.dispatch(new fromStore.SelectPizza(pizza));
-      }
-      this.pizza = pizza;
-      this.toppingsService.getToppings().subscribe(toppings => {
-        this.toppings = toppings;
-      });
-    });
+    // this.pizzaService.getPizzas().subscribe(pizzas => {
+    //   const param = this.route.snapshot.params.id;
+    //   let pizza;
+    //   if (param === 'new') {
+    //     pizza = {};
+    //   } else {
+    //     pizza = pizzas.find(pizza => pizza.id == parseInt(param, 10));
+    //     this.store.dispatch(new fromStore.SelectPizza(pizza));
+    //   }
+    //   this.pizza = pizza;
+    //   this.toppingsService.getToppings().subscribe(toppings => {
+    //     this.toppings = toppings;
+    //   });
+    // });
+
+    this.pizza$ = this.route.params.pipe(
+      switchMap((params) => {
+        if (params.id === 'new') {
+            this.store.dispatch(new fromStore.SelectPizza({}));
+            return of({});
+        }
+
+        return this.store.select(fromStore.getPizzas).pipe(
+          map(pizzas => {
+            console.log(pizzas);
+            return pizzas.find(pizza => pizza.id == parseInt(params.id, 10));
+          }),
+          tap((pizza: Pizza) => this.store.dispatch(new fromStore.SelectPizza(pizza))),
+        )
+      })
+    );
+
+    this.store.dispatch(new fromStore.LoadPizzas());
   }
 
   onSelect(event: Pizza) {
