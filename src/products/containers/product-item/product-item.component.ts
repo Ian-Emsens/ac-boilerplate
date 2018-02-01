@@ -79,15 +79,18 @@ export class ProductItemComponent implements OnInit {
 
         return this.store.select(fromStore.getPizzas).pipe(
           map(pizzas => {
-            console.log(pizzas);
+            if (pizzas.length === 0) {
+              // prevents an additional load per select but opens up the can of worms that is
+              // cache validity and refresh strategies
+              this.store.dispatch(new fromStore.LoadPizzas());
+            }
+
             return pizzas.find(pizza => pizza.id == parseInt(params.id, 10));
           }),
           tap((pizza: Pizza) => this.store.dispatch(new fromStore.SelectPizza(pizza))),
         )
       })
     );
-
-    this.store.dispatch(new fromStore.LoadPizzas());
   }
 
   onSelect(event: Pizza) {
