@@ -1,5 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
+import { Store } from '@ngrx/store';
+
 import { Pizza } from '../../models/pizza.model';
 import { PizzasService } from '../../services/pizzas.service';
 
@@ -13,7 +15,7 @@ import * as fromStore from '../../store';
     <div class="products">
       <div class="products__new">
         <a
-          class="btn btn__ok" 
+          class="btn btn__ok"
           routerLink="./new">
           New Pizza
         </a>
@@ -33,9 +35,14 @@ import * as fromStore from '../../store';
 export class ProductsComponent implements OnInit {
   pizzas: Pizza[];
 
-  constructor(private pizzaService: PizzasService) {}
+  constructor(
+    private pizzaService: PizzasService,
+    private store: Store<fromStore.ProductsState>,
+  ) {}
 
   ngOnInit() {
+    this.store.dispatch(new fromStore.LoadPizza());
+
     this.pizzaService.getPizzas().subscribe(pizzas => {
       this.pizzas = pizzas;
     });
