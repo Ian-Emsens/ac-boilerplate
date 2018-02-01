@@ -5,18 +5,21 @@ export interface PizzaState {
   loaded: boolean;
   loading: boolean;
   pizzas: Pizza[];
+  selected: Pizza;
 }
 
 const initialState: PizzaState = {
   loaded: false,
   loading: false,
   pizzas: [],
+  selected: null,
 };
 
 export function reducer(state: PizzaState = initialState, action: fromPizzas.PizzasAction): PizzaState {
   switch (action.type) {
+
+    // Load
     case fromPizzas.LOAD_PIZZAS: {
-      console.log(fromPizzas.LOAD_PIZZAS, state);
       return {
         ...state,
         loading: true,
@@ -38,6 +41,14 @@ export function reducer(state: PizzaState = initialState, action: fromPizzas.Piz
         loading: false,
         loaded: true,
         pizzas: action.payload,
+      }
+    }
+
+    // Select
+    case fromPizzas.SELECT_PIZZA: {
+      return {
+        ...state,
+        selected: action.payload
       }
     }
 

@@ -14,11 +14,12 @@ import {
 
 import * as pizzaActions from '../actions/pizzas.action';
 import * as fromServices from '../../services';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class PizzasEffects {
 
-  @Effect() loadPizza$ =
+  @Effect() loadPizza$: Observable<pizzaActions.PizzasAction> =
     this.actions.ofType(pizzaActions.LOAD_PIZZAS).pipe(
       exhaustMap(() => {
         return this.pizzaService.getPizzas().pipe(

@@ -23,5 +23,13 @@
         transform: scale(1.05);
       }
     }
+    .empty {
+      display: none;
+      text-align: center;
+      width: 100%;
+      &:first-child:last-child {
+        display: block;
+      }
+    }
   }
 }
