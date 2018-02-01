@@ -18,6 +18,13 @@ export const reducers: ActionReducerMap<ProductsState> = {
 };
 
 // selector
+
+// Main
 export const getProductsState = createFeatureSelector<ProductsState>('products');
+
+// Products Module
 export const getPizzaState = createSelector(getProductsState, (state: ProductsState) => state.pizzas);
+
+// Products Selectors
 export const getPizzas = createSelector(getPizzaState, fromPizzas.getPizzas);
+export const getSelectedPizza = createSelector(getPizzaState, fromPizzas.getSelectedPizza);
