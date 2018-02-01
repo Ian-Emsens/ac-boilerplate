@@ -22,24 +22,24 @@ export function reducer(state: PizzaState = initialState, action: fromPizzas.Piz
     case fromPizzas.LOAD_PIZZAS: {
       return {
         ...state,
-        loading: true,
         loaded: false,
+        loading: true,
       }
     }
 
     case fromPizzas.LOAD_PIZZAS_FAIL: {
       return {
         ...state,
-        loading: false,
         loaded: false,
+        loading: false,
       }
     }
 
     case fromPizzas.LOAD_PIZZAS_SUCCESS: {
       return {
         ...state,
-        loading: false,
         loaded: true,
+        loading: false,
         pizzas: action.payload,
       }
     }
