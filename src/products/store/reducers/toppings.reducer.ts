@@ -48,3 +48,8 @@ export function reducer(state: ToppingsState = initialState, action: fromTopping
   }
   return state;
 }
+
+// Load
+export const getToppings = (state: ToppingsState) => state.toppings;
+export const getToppingsLoaded = (state: ToppingsState) => state.loaded;
+export const getToppingsLoading = (state: ToppingsState) => state.loading;
