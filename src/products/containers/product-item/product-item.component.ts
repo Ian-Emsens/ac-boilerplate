@@ -41,8 +41,7 @@ import * as fromStore from '../../store';
 export class ProductItemComponent implements OnInit {
   pizza$: Observable<Pizza>;
   selected$: Observable<Pizza>;
-
-  toppings: string[];
+  toppings$: Observable<string[]>;
 
   constructor(
     private pizzaService: PizzasService,
@@ -54,6 +53,7 @@ export class ProductItemComponent implements OnInit {
 
   ngOnInit() {
     this.selected$ = this.store.select(fromStore.getSelectedPizza);
+    this.toppings$ = this.store.select(fromStore.getToppings);
 
     // this.pizzaService.getPizzas().subscribe(pizzas => {
     //   const param = this.route.snapshot.params.id;
