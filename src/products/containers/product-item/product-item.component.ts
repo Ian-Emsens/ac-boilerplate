@@ -26,7 +26,7 @@ import * as fromStore from '../../store';
       class="product-item">
       <pizza-form
         [pizza]="pizza$ | async"
-        [toppings]="toppings"
+        [toppings]="toppings$ | async"
         (selected)="onSelect($event)"
         (create)="onCreate($event)"
         (update)="onUpdate($event)"
@@ -73,8 +73,9 @@ export class ProductItemComponent implements OnInit {
     this.pizza$ = this.route.params.pipe(
       switchMap((params) => {
         if (params.id === 'new') {
-            this.store.dispatch(new fromStore.SelectPizza({}));
-            return of({});
+          this.store.dispatch(new fromStore.SelectPizza({}));
+          this.store.dispatch(new fromStore.LoadToppings());
+          return of({});
         }
 
         return this.store.select(fromStore.getPizzas).pipe(
